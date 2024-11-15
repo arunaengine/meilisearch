@@ -177,7 +177,7 @@ impl Index {
     ) -> Result<Index> {
         use db_name::*;
 
-        options.max_dbs(30);
+        options.max_dbs(31);
 
         let env = unsafe { options.open(path) }?;
         let mut wtxn = env.write_txn()?;
