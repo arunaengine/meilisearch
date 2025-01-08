@@ -179,7 +179,7 @@ impl Index {
     ) -> Result<Index> {
         use db_name::*;
 
-        options.max_dbs(25);
+        options.max_dbs(40);
 
         let env = unsafe { options.open(path) }?;
         let mut wtxn = env.write_txn()?;
@@ -398,11 +398,7 @@ impl Index {
 
     /// Writes the fields ids map which associate the documents keys with an internal field id
     /// (i.e. `u8`), this field id is used to identify fields in the obkv documents.
-    pub(crate) fn put_fields_ids_map(
-        &self,
-        wtxn: &mut RwTxn<'_>,
-        map: &FieldsIdsMap,
-    ) -> heed::Result<()> {
+    pub fn put_fields_ids_map(&self, wtxn: &mut RwTxn<'_>, map: &FieldsIdsMap) -> heed::Result<()> {
         self.main.remap_types::<Str, SerdeJson<FieldsIdsMap>>().put(
             wtxn,
             main_key::FIELDS_IDS_MAP_KEY,
