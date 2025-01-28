@@ -107,10 +107,10 @@ pub mod db_name {
 #[derive(Clone)]
 pub struct Index {
     /// The LMDB environment which this index is associated with.
-    pub(crate) env: heed::Env,
+    pub env: heed::Env,
 
     /// Contains many different types (e.g. the fields ids map).
-    pub(crate) main: Database<Unspecified, Unspecified>,
+    pub main: Database<Unspecified, Unspecified>,
 
     /// Maps the external documents ids with the internal document id.
     pub external_documents_ids: Database<Str, BEU32>,
@@ -169,7 +169,7 @@ pub struct Index {
     pub vector_arroy: arroy::Database<Unspecified>,
 
     /// Maps the document id to the document as an obkv store.
-    pub(crate) documents: Database<BEU32, ObkvCodec>,
+    pub documents: Database<BEU32, ObkvCodec>,
 }
 
 impl Index {
@@ -182,7 +182,7 @@ impl Index {
     ) -> Result<Index> {
         use db_name::*;
 
-        options.max_dbs(25);
+        options.max_dbs(40);
 
         let env = unsafe { options.open(path) }?;
         let mut wtxn = env.write_txn()?;
@@ -437,7 +437,7 @@ impl Index {
 
     /// Writes the fields ids map which associate the documents keys with an internal field id
     /// (i.e. `u8`), this field id is used to identify fields in the obkv documents.
-    pub(crate) fn put_fields_ids_map(
+    pub fn put_fields_ids_map(
         &self,
         wtxn: &mut RwTxn<'_>,
         map: &FieldsIdsMap,
